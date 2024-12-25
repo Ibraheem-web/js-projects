@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="number" id="value">
+    <button onclick="calculate()">
+        Find my grade!
+    </button>
+
+    <script>
+        function calculate() {
+            const value = document.getElementById('value').value;
+            let grade;
+            
+            if (value < 60) {
+                grade = 'F';
+            } else if (value >= 60 && value < 70) {
+                grade = 'D';
+            } else if (value >= 70 && value < 80) {
+                grade = 'C';
+            } else if (value >= 80 && value < 90) {
+                grade = 'B';
+            } else if (value >= 90) {
+                grade = 'A';
+            };
+
+            if (value < 0 || value > 100) {
+                alert('Invalid marks');
+            } else if (value === '') {
+                alert('Please enter a value to get your grades.')
+            } else {
+                alert(`Your marks are ${value}. Your grade is ${grade}.`);
+            };
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: slategrey;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 10px;
+}
+
+.input-section {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+
+.task-counter {
+    position: absolute;
+    border-radius: 50%;
+    background: black;
+    padding: 5px;
+    color: white;
+    right: -15px;
+    top: -15px;
+    rotate: 15deg;
+}
+
+.input-field {
+    border: none;
+    padding: 10px;
+    color: black;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 80%;
+    font-size: 16px;
+}
+
+.input-field:focus {
+    outline: none;
+}
+
+.input-button {
+    padding: 7px 0;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: none;
+    width: 20%;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #e9e9ed;
+}
+
+.tasks {
+    list-style: none;
+    background-color: #e9e9ed;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.task {
+    padding: 7px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.task:nth-child(even) {
+    background-color: #cccccc;
+}
+
+.task > span > button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    margin: 0 5px;
+}
+
+.message {
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 10px;
+    color: white;
+    display: none;
+}
+
+.message > span > * {
+    color: white;
+}
+
+@media (min-width: 640px) {
+    .main {
+        padding: 25px 0;
+    }
+    .input-section {
+        width: 60%;
+    }
+
+    .tasks {
+        width: 60%;
+    }
+
+    .message {
+        width: 30%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+}

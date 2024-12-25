@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./to-do-app.css">
+    <title>To-do List</title>
+</head>
+<body>
+    <main class="main">
+        <section class="input-section">
+            <span class="task-counter">0</span>
+            <input type="text" class="input-field" spellcheck="true" placeholder="Enter task here...">
+            <button class="input-button">Add</button>
+        </section>
+        <ul class="tasks"></ul>
+        <li class="task message"><span><button onclick="hideMessage()">x</button></span></li>
+    </main>
+
+    <script>
+        const tasks = document.querySelector('.tasks'); 
+        const addButton = document.querySelector('.input-button');
+        const messageBox = document.querySelector('.message');
+        let intervalId;
+
+        addButton.addEventListener("click", () => {
+            const inputField = document.querySelector('.input-field');
+            let value = inputField.value;
+            if (!value) {
+                showMessage('No text added!', 'fail');
+            } else {
+                tasks.style.display = 'flex';
+                tasks.insertAdjacentHTML(
+                    "afterbegin",
+                    `<li class="task">${value} <span><button onclick="removeLi.call(this)">x</button></span></li>`
+                );
+                showMessage('New task added!', 'success');
+            };
+            inputField.value = '';
+
+            taskCounter();
+        });
+
+        function removeLi() {
+            const parentLi = this.parentElement.parentElement;
+            parentLi.remove();
+
+            taskCounter();
+            resetBox();
+            showMessage('Task removed', 'success');
+        };
+
+        function showMessage(text, result) {
+            hideMessage();
+            messageBox.insertAdjacentText(
+                    "afterbegin",
+                    text
+            );
+            messageBox.style.display = 'flex';
+            if (result === 'success') {
+                messageBox.style.background = '#22c55e';
+            } else if (result === 'fail') {
+                messageBox.style.background = '#ef4444';
+            };
+
+            intervalId = setInterval(hideMessage, 5000);
+            return intervalId;
+        };
+
+        function hideMessage() {
+            if (messageBox.firstChild.nodeType === Node.TEXT_NODE) {
+                messageBox.firstChild.nodeValue = '';
+            }
+            messageBox.style.display = 'none';
+
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+
+        function resetBox() {
+            if (!tasks.textContent.trim()) {
+                tasks.style.display = 'none';
+            };
+        }; 
+
+        function taskCounter() {
+            const length = tasks.getElementsByClassName('task').length;
+            const counter = document.querySelector(`.task-counter`);
+            counter.innerHTML = length;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="firstNumber(true)">First Number</button>
+
+    <button onclick="operator('+')">+</button>
+
+    <button onclick="operator('-')">-</button>
+
+    <button onclick="operator('*')">*</button>
+
+    <button onclick="operator('/')">/</button>
+
+    <button onclick="secondNumber(true)">Second Number</button>
+
+    <button onclick="calculate()">Calculate</button>
+    <script>
+        let firstValue;
+        let secondValue;
+        let userOperator;
+        let result;
+
+        function firstNumber(promptForInput = false) {
+            if (promptForInput) {
+                const input = prompt(`Enter first number`);
+                firstValue = Number(input);
+
+                if (isNaN(firstValue)) {
+                    alert('Please put a valid number for calculation.');
+                } else if (firstValue === 0) {
+                    alert('No value added');
+                } else {
+                    if (userOperator === undefined && secondValue === undefined) {
+                        alert(`${firstValue} is the first number. Please select an operator and enter second number to calculate.`)
+                    } else if (userOperator === undefined) {
+                        alert(`${firstValue} is the first number and ${secondValue} is the second number. Select an operator to perform calculation.`);
+                    } else if (secondValue === undefined) {
+                        alert(`${firstValue} is the first number and ${userOperator} is your operator. Please enter second number to calculate.`);
+                    } else {
+                        alert(`${firstValue} is the first number for calculation.`);
+                    };
+                };
+
+            };
+
+            return firstValue;
+        };
+
+        function operator(sign) {
+            if (sign === '+') {
+                userOperator = '+';
+            } else if (sign === '-') {
+                userOperator = '-';
+            } else if (sign === '*') {
+                userOperator = '*';
+            } else if (sign === '/') {
+                userOperator = '/';
+            };
+            
+            if (firstValue === undefined && secondValue === undefined) {
+                alert(`You selected ${userOperator} operator. Enter first and second numbers to calculate.`);
+            } else if (firstValue === undefined) {
+                alert(`You selected ${userOperator} operator and ${secondValue} is the second number. Enter first number to calculate.`);
+            } else if (secondValue === undefined) {
+                alert(`You selected ${userOperator} operator and ${firstValue} is the first number. Enter second number to calculate.`);
+            } else {
+                alert(`You selected ${userOperator} operator.`);
+            }
+
+            return userOperator;
+        };
+
+
+        function secondNumber(promptForInput = false) {
+            if (promptForInput) {
+                const input = prompt(`Enter second number`);
+                secondValue = Number(input);
+
+                if (isNaN(secondValue)) {
+                    alert('Please put a valid number for calculation.');
+                } else if (secondValue === 0) {
+                    alert('No value added');
+                } else {
+                    if (userOperator === undefined && firstValue === undefined) {
+                        alert(`${secondValue} is the second number. Please select an operator and enter first number to calculate.`)
+                    } else if (userOperator === undefined) {
+                        alert(`${firstValue} is the first number and ${secondValue} is the second number. Select an operator to perform calculation.`);
+                    } else if (firstValue === undefined) {
+                        alert(`${secondValue} is the second value and ${userOperator} is the operator for calculation. Enter first number to calculate.`);
+                    } else {
+                        alert(`${secondValue} is the second number for calculation.`);
+                    }
+                };
+
+            };
+
+            return secondValue;
+        };
+
+        function calculate() {
+            if (firstValue === undefined) {
+                alert('Enter first number to calculate.')
+            } else if (userOperator === undefined) {
+                alert('Error! No operator selected.');
+            } else if (secondValue === undefined) {
+                alert('Enter second number to calculate');
+            } else if (userOperator === '+') {
+                result = firstValue + secondValue;
+                alert(`${firstValue} ${userOperator} ${secondValue} = ${result}`);
+            } else if (userOperator === '-') {
+                result = firstValue - secondValue;
+                alert(`${firstValue} ${userOperator} ${secondValue} = ${result}`);
+            } else if (userOperator === '*') {
+                result = firstValue * secondValue;
+                alert(`${firstValue} ${userOperator} ${secondValue} = ${result}`);
+            } else if (userOperator === '/' && secondValue === 0){
+                alert(`Division with 0 isn't allowed.`);
+            } else if (userOperator === '/') {
+                result = firstValue / secondValue;
+                alert(`${firstValue} ${userOperator} ${secondValue} = ${result}`);
+            };
+        };
+    </script>
+</body>
+</html>
