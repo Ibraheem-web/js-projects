@@ -20,6 +20,7 @@ header {
     align-items: center;
     flex-wrap: wrap;
     list-style: none;
+    gap: 5px;
 }
 
 .menu-item {
@@ -122,6 +123,33 @@ header {
 
 .message > span > * {
     color: white;
+}
+
+.reminder {
+    position: absolute;
+    right: 0;
+    top: -25px;
+    padding: 5px 15px;
+    background: #ffff;
+    border-radius: 30px;
+    border: 1px solid black;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+
+.reminder > input {
+    border: none;
+    cursor: pointer;
+}
+
+.reminder > input:focus {
+    outline: none;
+}
+
+.reminder > button {
+    border: none;
+    background: none;
+    cursor: pointer;
 }
 
 @media (min-width: 640px) {

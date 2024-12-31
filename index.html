@@ -28,7 +28,8 @@
         const tasks = document.querySelector('.tasks'); 
         const addButton = document.querySelector('.input-button');
         const messageBox = document.querySelector('.message');
-        let intervalId;
+        let taskReminderValues = {};
+        let intervalId, reminderResult, reminderValue, tasksLength, idCounter;
 
         addButton.addEventListener("click", () => {
             const inputField = document.querySelector('.input-field');
@@ -39,7 +40,13 @@
                 tasks.style.display = 'flex';
                 tasks.insertAdjacentHTML(
                     "afterbegin",
-                    `<li class="task">${value} <span><button onclick="removeLi.call(this)">x</button></span></li>`
+                    `<li class="task">
+                        ${value}
+                        <span>
+                            <button onclick="addReminder.call(this)">Reminder</button>
+                            <button onclick="removeLi.call(this)">x</button>
+                        </span>
+                    </li>`
                 );
                 showMessage('New task added!', 'success');
             };
@@ -48,21 +55,93 @@
             taskCounter();
         });
 
+        function addReminder() {
+            const parentElem = this.parentElement.parentElement;
+            const reminder = parentElem.querySelector('.reminder');
+            if (!reminder) {
+                if (tasks.getElementsByClassName('task').length === 1) {
+                    idCounter = 1;
+                } else {
+                    idCounter++;
+                };
+                parentElem.insertAdjacentHTML(
+                    'beforeend',
+                    `
+                    <div class="reminder">
+                        <input
+                        type="datetime-local"
+                        id="reminder${idCounter}"
+                        name="reminder" />
+                        <button onclick="closeReminder.call(this)">Done</button>
+                    </div>
+                    `
+                );
+                reminderResult = "Reminder added!";
+            } else if (reminder.style.display === 'none') {
+                reminder.style.display = 'block';
+                reminderResult = "Reminder updated!";
+            };
+            return reminderResult;
+        };
+
+        function closeReminder() {
+            const parentElem = this.parentElement.parentElement;
+            const reminder = parentElem.querySelector('.reminder');
+            const inputValue = parentElem.getElementsByTagName('input')[0].value;
+            if (inputValue) {
+                showMessage(reminderResult, 'success');
+            } else {
+                showMessage('No value added', 'fail');
+            };
+            reminder.style.display = 'none';
+
+            const msValue = new Date(inputValue).getTime();
+            const diffInMs = msValue - Date.now();
+            taskReminderValues = {
+                ...taskReminderValues,
+                [`reminder${idCounter}`]: diffInMs,
+            };
+            return taskReminderValues;
+        };
+
+        /*  function getValues() {
+            const task = tasks.querySelectorAll('.task');
+        
+            task.forEach((eachTask) => {
+                const reminder = eachTask.querySelector(`#reminder${idCounter}`);
+                if (reminder) {
+                    taskReminderValues = {
+                        ...taskReminderValues,
+                        [`reminder${idCounter}`]: reminder.value,
+                    };
+                };
+            });
+        
+            return taskReminderValues;
+        };  */
+
         function removeLi() {
             const parentLi = this.parentElement.parentElement;
+            let command;
+            if (idCounter) {
+                const inputId = parentLi.getElementsByTagName('input')[0].id;
+                command = delete taskReminderValues[`${inputId}`];
+            };
+            
             parentLi.remove();
-
             taskCounter();
             resetBox();
             showMessage('Task removed', 'success');
-        };
 
+            return command;
+        };
+        
         function showMessage(text, result) {
             hideMessage();
             messageBox.insertAdjacentText(
-                    "afterbegin",
-                    text
-            );
+                "afterbegin",
+                text
+                );
             messageBox.style.display = 'flex';
             if (result === 'success') {
                 messageBox.style.background = '#22c55e';
@@ -73,28 +152,30 @@
             intervalId = setInterval(hideMessage, 5000);
             return intervalId;
         };
-
+        
         function hideMessage() {
             if (messageBox.firstChild.nodeType === Node.TEXT_NODE) {
                 messageBox.firstChild.nodeValue = '';
             }
             messageBox.style.display = 'none';
-
+            
             if (intervalId) {
                 clearInterval(intervalId);
             }
         };
-
+        
         function resetBox() {
             if (!tasks.textContent.trim()) {
                 tasks.style.display = 'none';
             };
         }; 
-
+        
         function taskCounter() {
-            const length = tasks.getElementsByClassName('task').length;
+            tasksLength = tasks.getElementsByClassName('task').length;
             const counter = document.querySelector(`.task-counter`);
-            counter.innerHTML = length;
+            counter.innerHTML = tasksLength;
+
+            return tasksLength;
         };
     </script>
 </body>
