@@ -90,36 +90,34 @@
             const inputValue = parentElem.getElementsByTagName('input')[0].value;
             if (inputValue) {
                 showMessage(reminderResult, 'success');
+                const msValue = new Date(inputValue).getTime();
+                const diffInMs = msValue - Date.now();
+                newReminderValue = {
+                    ...taskReminderValues,
+                    [`reminder${idCounter}`]: msValue,
+                };
+                taskReminderValues = newReminderValue;
+                remindMe();
             } else {
                 showMessage('No value added', 'fail');
             };
             reminder.style.display = 'none';
-
-            const msValue = new Date(inputValue).getTime();
-            const diffInMs = msValue - Date.now();
-            taskReminderValues = {
-                ...taskReminderValues,
-                [`reminder${idCounter}`]: diffInMs,
-            };
-            return taskReminderValues;
         };
 
-        /*  function getValues() {
-            const task = tasks.querySelectorAll('.task');
+        function remindMe() {
+            const reminderValuesArr = Object.values(taskReminderValues);
+            const currentTime = Date.now();
         
-            task.forEach((eachTask) => {
-                const reminder = eachTask.querySelector(`#reminder${idCounter}`);
-                if (reminder) {
-                    taskReminderValues = {
-                        ...taskReminderValues,
-                        [`reminder${idCounter}`]: reminder.value,
-                    };
-                };
+            // Define a margin of error (e.g., 100ms) to account for slight mismatches
+            const margin = 100;
+        
+            reminderValuesArr.forEach((value) => {
+                if (Math.abs(value - currentTime) <= margin) {
+                    console.log(`${value} is now`);
+                }
             });
+        };        
         
-            return taskReminderValues;
-        };  */
-
         function removeLi() {
             const parentLi = this.parentElement.parentElement;
             let command;
