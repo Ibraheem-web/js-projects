@@ -15,20 +15,39 @@
         </ul>
     </header>
     <main class="main">
-        <section class="input-section">
+        <p class="counter">
+            Total Task
             <span class="task-counter">0</span>
+        </p>
+        <section class="input-section">
             <input type="text" class="input-field" spellcheck="true" placeholder="Enter task here...">
             <button class="input-button">Add</button>
         </section>
         <ul class="tasks"></ul>
-        <li class="task message"><span><button onclick="hideMessage()">x</button></span></li>
+        <div class="popup-container">
+            <div>
+                <li class="task message"><span><button onclick="hideMessage()">x</button></span></li>
+            </div>
+            <div>
+                <div class="timer-wrapper">
+                    Reminder for Lorem ipsum dolor sit amet.
+                    <audio autoplay loop controls>
+                        <source src="./static/audio/beep.mp3">
+                    </audio>
+                    <div>
+                        <button>Stop</button>
+                        <button>Snooze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
         const tasks = document.querySelector('.tasks'); 
         const addButton = document.querySelector('.input-button');
         const messageBox = document.querySelector('.message');
-        let taskReminderValues = {};
+        let allTimers, doneTimers = {};
         let intervalId, reminderResult, reminderValue, tasksLength, idCounter;
 
         addButton.addEventListener("click", () => {
@@ -44,7 +63,7 @@
                         ${value}
                         <span>
                             <button onclick="addReminder.call(this)">Reminder</button>
-                            <button onclick="removeLi.call(this)">x</button>
+                            <button onclick="removeLi.call(this)" title="Close">x</button>
                         </span>
                     </li>`
                 );
@@ -88,42 +107,50 @@
             const parentElem = this.parentElement.parentElement;
             const reminder = parentElem.querySelector('.reminder');
             const inputValue = parentElem.getElementsByTagName('input')[0].value;
+        
             if (inputValue) {
                 showMessage(reminderResult, 'success');
+        
+                // Calculate the difference in milliseconds
                 const msValue = new Date(inputValue).getTime();
                 const diffInMs = msValue - Date.now();
+        
+                // Add new reminder to allTimers
                 newReminderValue = {
-                    ...taskReminderValues,
-                    [`reminder${idCounter}`]: msValue,
+                    ...allTimers,
+                    [`reminder${idCounter}`]: diffInMs,
                 };
-                taskReminderValues = newReminderValue;
+                allTimers = newReminderValue;
+        
+                // Call remindMe to handle timers
                 remindMe();
             } else {
                 showMessage('No value added', 'fail');
-            };
+            }
+        
             reminder.style.display = 'none';
-        };
-
+        }
+        
         function remindMe() {
-            const reminderValuesArr = Object.values(taskReminderValues);
-            const currentTime = Date.now();
-        
-            // Define a margin of error (e.g., 100ms) to account for slight mismatches
-            const margin = 100;
-        
-            reminderValuesArr.forEach((value) => {
-                if (Math.abs(value - currentTime) <= margin) {
-                    console.log(`${value} is now`);
-                }
+            Object.entries(allTimers).forEach(([key, value]) => {
+                if (!doneTimers[key]) {
+                    setTimeout(thisFunction, value);
+                    delete allTimers[key];
+                };
+
+                function thisFunction() {
+                    console.log(`im running for ${key}`);
+                    doneTimers[key] = value;
+                };
             });
-        };        
+        };
         
         function removeLi() {
             const parentLi = this.parentElement.parentElement;
             let command;
             if (idCounter) {
                 const inputId = parentLi.getElementsByTagName('input')[0].id;
-                command = delete taskReminderValues[`${inputId}`];
+                command = delete allTimers[`${inputId}`];
             };
             
             parentLi.remove();

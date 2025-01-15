@@ -38,21 +38,18 @@ header {
     padding: 25px 10px;
 }
 
+.counter {
+    color: white;
+    background: #000;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: full;
+    padding: 5px 10px;
+}
+
 .input-section {
     display: flex;
     width: 100%;
-    position: relative;
-}
-
-.task-counter {
-    position: absolute;
-    border-radius: 50%;
-    background: black;
-    padding: 5px;
-    color: white;
-    right: -15px;
-    top: -15px;
-    rotate: 15deg;
 }
 
 .input-field {
@@ -99,10 +96,19 @@ header {
     display: flex;
     justify-content: space-between;
     position: relative;
+    align-items: start;
 }
 
 .task:nth-child(even) {
     background-color: #cccccc;
+}
+
+.task > span {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: end;
+    align-items: start;
+    padding: 5px;
 }
 
 .task > span > button {
@@ -119,6 +125,8 @@ header {
     bottom: 10px;
     color: white;
     display: none;
+    right: 10px;
+    left: 10px;
 }
 
 .message > span > * {
@@ -152,6 +160,31 @@ header {
     cursor: pointer;
 }
 
+.popup-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.timer-wrapper {
+    color: white;
+    background: blueviolet;
+    padding: 10px;
+    border-radius: 10px;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-right: 10px;
+}
+
+.timer-wrapper > * > button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 @media (min-width: 640px) {
     header {
         width: 60%;
@@ -167,10 +200,15 @@ header {
 
     .tasks {
         width: 60%;
+        margin-right: 0;
     }
 
     .message {
         width: 30%;
+    }
+
+    .timer-wrapper {
+        margin-right: 0;
     }
 }
 
