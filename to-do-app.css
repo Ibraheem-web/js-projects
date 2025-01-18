@@ -125,8 +125,6 @@ header {
     bottom: 10px;
     color: white;
     display: none;
-    right: 10px;
-    left: 10px;
 }
 
 .message > span > * {
@@ -174,15 +172,45 @@ header {
     position: fixed;
     left: 10px;
     bottom: 10px;
-    display: flex;
+    display: none;
     flex-direction: column;
     row-gap: 10px;
     margin-right: 10px;
 }
 
-.timer-wrapper > * > button {
+.timer-wrapper > * > .button {
     padding: 5px 10px;
     cursor: pointer;
+}
+
+.timer-wrapper .select {
+    position: absolute;
+    left: 75px;
+}
+
+.timer-wrapper .custom-label {
+    margin-left: 150px;
+    position: absolute;
+    bottom: 10px;
+}
+
+.timer-wrapper #custom-label {
+    cursor: pointer;
+}
+
+.timer-wrapper #custom-value {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    width: 120px;
+    padding-left: 5px;
+    border: none;
+    display: none;
+}
+
+.timer-wrapper .snooze-btn {
+    position: absolute;
+    left: 70px;
 }
 
 @media (min-width: 640px) {
@@ -205,6 +233,7 @@ header {
 
     .message {
         width: 30%;
+        margin-left: -15%;
     }
 
     .timer-wrapper {

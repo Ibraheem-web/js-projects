@@ -35,8 +35,20 @@
                         <source src="./static/audio/beep.mp3">
                     </audio>
                     <div>
-                        <button id="stop-beep-elm">Stop</button>
-                        <button id="snooze-elm">Snooze</button>
+                        <button id="stop-beep-elm" class="button">Stop</button>
+                        <select name="snooze-duration" id="snooze-val" class="button select">
+                            <option value="5000">5 sec</option>
+                            <option value="10000">10 sec</option>
+                            <option value="15000">15 sec</option>
+                            <option value="20000">20 sec</option>
+                            <option value="25000">25 sec</option>
+                            <option value="30000">30 sec</option>
+                        </select>
+                        <div id="stop-default" class="custom-label">
+                            <label for="custom-value" id="custom-label">Custom Snooze Value</label>
+                            <input type="number" id="custom-value" placeholder="in ms">
+                        </div>
+                        <button id="snooze-elm" class="button snooze-btn">Snooze</button>
                     </div>
                 </div>
             </div>
@@ -47,9 +59,23 @@
         const tasks = document.querySelector('.tasks'); 
         const addButton = document.querySelector('.input-button');
         const messageBox = document.querySelector('.message');
+        const reminder = document.querySelector('.timer-wrapper');
         const music = document.getElementById('music');
+        const stopBeepElm = document.querySelector('#stop-beep-elm');
+        const snoozeElm = document.querySelector('#snooze-elm');
+        const customInput = document.querySelector('#custom-value');
+        const customLabel = document.querySelector('#custom-label');
+        customLabel.addEventListener('click', (i) => {
+            customInput.style.display = 'block';
+        });
+        document.querySelector('#stop-default').addEventListener('click', (i) => {
+            i.stopPropagation();
+        });
+        window.addEventListener('click', () => {
+            customInput.style.display = 'none';
+        });
         let allTimers, doneTimers = {};
-        let intervalId, reminderResult, reminderValue, tasksLength, idCounter, stopBeep, snooze;
+        let intervalId, reminderResult, reminderValue, tasksLength, idCounter;
 
         addButton.addEventListener("click", () => {
             const inputField = document.querySelector('.input-field');
@@ -139,23 +165,42 @@
                 };
                 
                 function thisFunction() {
+                    reminder.style.display = 'flex';
                     music.play();
-                    console.log(`im running for ${key}`);
                 };
 
-                stopBeep = function () {
+                stopBeepElm.addEventListener('click', (i) => {
+                    reminder.style.display = 'none';
+                    i.defaultPrevented = false;
+                    if (!music.paused) {
+                        showMessage('Reminder stopped!')
+                        music.pause();
+                        delete allTimers[key];
+                        doneTimers[key] = value;
+                    };
+                });
+
+                snoozeElm.addEventListener('click', (i) => {
+                    reminder.style.display = 'none';
+                    i.defaultPrevented = false;
+                    let value;
+                    const snoozeValue = document.querySelector('#snooze-val').value;
+                    if (customInput.value) {
+                        value = customInput.value;
+                        showMessage(`Reminder snoozed for ${value / 1000} seconds`, 'success');
+                    } else if (snoozeValue) {
+                        value = snoozeValue;
+                        showMessage(`Reminder snoozed for ${value / 1000} seconds`, 'success');
+                    } else {
+                        value = 5000;
+                        showMessage(`No value added! Reminder snoozed for default 5 seconds.`, 'fail');
+                    };
                     if (!music.paused) {
                         music.pause();
+                        setTimeout(thisFunction, value);
+                        customInput.value = "";
                     };
-                    delete allTimers[key];
-                    doneTimers[key] = value;
-                };
-
-                snooze = function () {
-                    setTimeout(thisFunction, 5000);
-                };
-
-                return stopBeep, snooze;
+                });
             });
         };
         
