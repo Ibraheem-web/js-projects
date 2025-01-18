@@ -31,12 +31,12 @@
             <div>
                 <div class="timer-wrapper">
                     Reminder for Lorem ipsum dolor sit amet.
-                    <audio autoplay loop controls>
+                    <audio loop id="music">
                         <source src="./static/audio/beep.mp3">
                     </audio>
                     <div>
-                        <button>Stop</button>
-                        <button>Snooze</button>
+                        <button id="stop-beep-elm">Stop</button>
+                        <button id="snooze-elm">Snooze</button>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,9 @@
         const tasks = document.querySelector('.tasks'); 
         const addButton = document.querySelector('.input-button');
         const messageBox = document.querySelector('.message');
+        const music = document.getElementById('music');
         let allTimers, doneTimers = {};
-        let intervalId, reminderResult, reminderValue, tasksLength, idCounter;
+        let intervalId, reminderResult, reminderValue, tasksLength, idCounter, stopBeep, snooze;
 
         addButton.addEventListener("click", () => {
             const inputField = document.querySelector('.input-field');
@@ -135,13 +136,26 @@
             Object.entries(allTimers).forEach(([key, value]) => {
                 if (!doneTimers[key]) {
                     setTimeout(thisFunction, value);
-                    delete allTimers[key];
+                };
+                
+                function thisFunction() {
+                    music.play();
+                    console.log(`im running for ${key}`);
                 };
 
-                function thisFunction() {
-                    console.log(`im running for ${key}`);
+                stopBeep = function () {
+                    if (!music.paused) {
+                        music.pause();
+                    };
+                    delete allTimers[key];
                     doneTimers[key] = value;
                 };
+
+                snooze = function () {
+                    setTimeout(thisFunction, 5000);
+                };
+
+                return stopBeep, snooze;
             });
         };
         
